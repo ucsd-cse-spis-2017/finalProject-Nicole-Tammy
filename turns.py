@@ -1,7 +1,7 @@
 # Libraries
 import RPi.GPIO as GPIO
 import time
-
+turnTime = 1
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
@@ -56,53 +56,65 @@ GPIO.output(GPIO_Cpwm, True)
 GPIO.output(GPIO_C1, True)
 GPIO.output(GPIO_C2, True)
 
-"""
-what we need to do:
-    30 degree turn for both sides
-    60 degree turn for both sides
-    stay still function
-    negative is left and positive is right
-"""
+
+#stay still
+def stayStill():
+    GPIO.output(GPIO_B1, False)
+    GPIO.output(GPIO_B2, False)
+    GPIO.output(GPIO_A1, False)
+    GPIO.output(GPIO_A2, False)
+    GPIO.output(GPIO_D1, False)
+    GPIO.output(GPIO_D2, False)
+    GPIO.output(GPIO_C1, False)
+    GPIO.output(GPIO_C2, False)
+    print ("Stop")
+    time.sleep(1)
+
+#left 30 degrees
+def left30():
+    GPIO.output(GPIO_A1, True)
+    GPIO.output(GPIO_A2, False)
+    GPIO.output(GPIO_C1, True)
+    GPIO.output(GPIO_C2, False)
+    GPIO.output(GPIO_B1, True)
+    GPIO.output(GPIO_B2, False)
+    GPIO.output(GPIO_D1, True)
+    GPIO.output(GPIO_D2, False)
+    print ("Left")
+    time.sleep(turnTime)
+
+            #right 30 degrees
+def right30():
+    GPIO.output(GPIO_B1, False)
+    GPIO.output(GPIO_B2, True)
+    GPIO.output(GPIO_D1, False)
+    GPIO.output(GPIO_D2, True)
+    GPIO.output(GPIO_A1, False)
+    GPIO.output(GPIO_A2, True)
+    GPIO.output(GPIO_C1, False)
+    GPIO.output(GPIO_C2, True)
+    print ("Right")
+    time.sleep(turnTime)
+            
+#left 60 degrees
+def left60():
+    left30()
+    left30()
+    
+#right 60 degrees
+def right60():
+    right30()
+    right30()
+
  
 if __name__ == '__main__':
     try:
-        while True:
-            GPIO.output(GPIO_B1, False)
-            GPIO.output(GPIO_B2, True)
-            GPIO.output(GPIO_A1, True)
-            GPIO.output(GPIO_A2, False)
-            GPIO.output(GPIO_D1, False)
-            GPIO.output(GPIO_D2, True)
-            GPIO.output(GPIO_C1, True)
-            GPIO.output(GPIO_C2, False)
-            print ("Forward")
-            time.sleep(1)
-
-            
-            GPIO.output(GPIO_B1, True)
-            GPIO.output(GPIO_B2, False)
-            GPIO.output(GPIO_A1, False)
-            GPIO.output(GPIO_A2, True)
-            GPIO.output(GPIO_D1, True)
-            GPIO.output(GPIO_D2, False)
-            GPIO.output(GPIO_C1, False)
-            GPIO.output(GPIO_C2, True)
-            print ("Backward")
-            time.sleep(1)
-
-            
-            GPIO.output(GPIO_B1, False)
-            GPIO.output(GPIO_B2, False)
-            GPIO.output(GPIO_A1, False)
-            GPIO.output(GPIO_A2, False)
-            GPIO.output(GPIO_D1, False)
-            GPIO.output(GPIO_D2, False)
-            GPIO.output(GPIO_C1, False)
-            GPIO.output(GPIO_C2, False)
-            print ("Stop")
-            time.sleep(1)
-
-            
+        left30()
+        right30()
+        stayStill()
+        left60()
+        right60()
+        stayStill()
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")
