@@ -7,11 +7,11 @@ import time
 GPIO.setmode(GPIO.BOARD)
  
 # set GPIO Pins
-GPIO_Servo= 12
+GPIO_Servo= 37
 GPIO_Servo2= 16
 
-GPIO_B1 = 13
-GPIO_B2 = 11
+GPIO_B1 = 29
+GPIO_B2 = 7
 GPIO_Bpwm = 15
 
 GPIO_Apwm = 31
