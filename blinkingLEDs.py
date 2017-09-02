@@ -47,7 +47,7 @@ def hc595_in(dat):
         GPIO.output(SDI, 0x80 & (dat << bit))
         GPIO.output(SRCLK, GPIO.HIGH)
         time.sleep(0.001)
-        GPIO.output(SRCLK, GPIO.LOW)
+        GPIO.output(SRCLK, GPIO.LOW) #srclk is used to access all at the same time, stands for shift register clock
 
 def hc595_out():
     GPIO.output(RCLK, GPIO.HIGH)

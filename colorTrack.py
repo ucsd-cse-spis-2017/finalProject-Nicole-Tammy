@@ -26,12 +26,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     image = frame.array
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # define the range of the green color in hsv
-    lower_green = np.array([21, 47, 46])
-    upper_green = np.array([32, 255, 255])
+    # define the range of the yellow color in hsv
+    lower_yellow = np.array([21, 47, 46])
+    upper_yellow = np.array([32, 255, 255])
 
-    # Threshold the hsv image to get only green colors
-    mask = cv2.inRange(hsv, lower_green, upper_green)
+    # Threshold the hsv image to get only yellow colors
+    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
     #Bitwise AND mask and original image
     res = cv2.bitwise_and(image, image, mask = mask)
