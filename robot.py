@@ -1,14 +1,19 @@
 # Libraries
 import RPi.GPIO as GPIO
 import time
-
+import shiftpi
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
- 
+
+#set shift register pins
+SER = 22
+RCLK = 18
+SRCLK = 16
+
 # set GPIO Pins
 GPIO_Servo= 37
-GPIO_Servo2= 16
+GPIO_Servo2= 12
 
 GPIO_B1 = 29
 GPIO_B2 = 7
@@ -16,15 +21,7 @@ GPIO_Bpwm = 15
 
 GPIO_Apwm = 31
 GPIO_A2 = 33
-GPIO_A1 = 35
-
-GPIO_Dpwm = 18
-GPIO_D2=  22
-GPIO_D1=32
-
-GPIO_Cpwm= 40
-GPIO_C2=38
-GPIO_C1 = 36
+GPIO_A1 = 35 
 
 # set GPIO direction (IN / OUT)
 GPIO.setup(GPIO_Servo, GPIO.OUT)
@@ -35,14 +32,7 @@ GPIO.setup(GPIO_Bpwm, GPIO.OUT)
 GPIO.setup(GPIO_A1, GPIO.OUT)
 GPIO.setup(GPIO_A2, GPIO.OUT)
 GPIO.setup(GPIO_Apwm, GPIO.OUT)
-
-
-GPIO.setup(GPIO_D1, GPIO.OUT)
-GPIO.setup(GPIO_D2, GPIO.OUT)
-GPIO.setup(GPIO_Dpwm, GPIO.OUT)
-GPIO.setup(GPIO_C1, GPIO.OUT)
-GPIO.setup(GPIO_C2, GPIO.OUT)
-GPIO.setup(GPIO_Cpwm, GPIO.OUT)
+_setPin(
 
 # set speed to HIGH
 
@@ -52,13 +42,9 @@ GPIO.output(GPIO_B2, True)
 GPIO.output(GPIO_Apwm, True)
 GPIO.output(GPIO_A1, True)
 GPIO.output(GPIO_A2, True)
+shiftpi.digitalWrite(3, shiftpi.HIGH)
+shiftpi.digitalWrite(2, shiftpi.HIGH) 
 
-GPIO.output(GPIO_Dpwm, True)
-GPIO.output(GPIO_D1, True)
-GPIO.output(GPIO_D2, True)
-GPIO.output(GPIO_Cpwm, True)
-GPIO.output(GPIO_C1, True)
-GPIO.output(GPIO_C2, True)
 
 
 # Set PWM parameters
@@ -82,6 +68,7 @@ pwm_servo2.start(set_duty_cycle(angle))
 if __name__ == '__main__':
     try:
         while True:
+            
             angle=0
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
@@ -90,12 +77,14 @@ if __name__ == '__main__':
             GPIO.output(GPIO_B2, True)
             GPIO.output(GPIO_A1, True)
             GPIO.output(GPIO_A2, False)
-            GPIO.output(GPIO_D1, False)
-            GPIO.output(GPIO_D2, True)
-            GPIO.output(GPIO_C1, True)
-            GPIO.output(GPIO_C2, False)
+
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+            shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
+            shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
+            shiftpi.digitalWrite(4, shiftpi.LOW) #C2
+
             print ("Forward")
-            time.sleep(1)
+            shiftpi.delay(1000)
 
             angle=45
             pwm_servo.start(set_duty_cycle(angle))
@@ -105,12 +94,13 @@ if __name__ == '__main__':
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
             GPIO.output(GPIO_A2, True)
-            GPIO.output(GPIO_D1, True)
-            GPIO.output(GPIO_D2, False)
-            GPIO.output(GPIO_C1, False)
-            GPIO.output(GPIO_C2, True)
+
+            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+            shiftpi.digitalWrite(15, shiftpi.LOW) #D2
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
+            shiftpi.digitalWrite(4, shiftpi.HIGH) #C2        
             print ("Backward")
-            time.sleep(1)
+            shiftpi.delay(1000)
 
             angle = 90
             pwm_servo.start(set_duty_cycle(angle))
@@ -120,42 +110,15 @@ if __name__ == '__main__':
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
             GPIO.output(GPIO_A2, False)
-            GPIO.output(GPIO_D1, False)
-            GPIO.output(GPIO_D2, False)
-            GPIO.output(GPIO_C1, False)
-            GPIO.output(GPIO_C2, False)
+
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+            shiftpi.digitalWrite(15, shiftpi.LOW) #D2
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
+            shiftpi.digitalWrite(4, shiftpi.LOW) #C2
+
             print ("Stop")
-            time.sleep(1)
+            shiftpi.delay(1000)
 
-            angle = 135
-            pwm_servo.start(set_duty_cycle(angle))
-            pwm_servo2.start(set_duty_cycle(angle))
-            print ("135")
-            GPIO.output(GPIO_B1, False)
-            GPIO.output(GPIO_B2, True)
-            GPIO.output(GPIO_A1, True)
-            GPIO.output(GPIO_A2, False)
-            GPIO.output(GPIO_D1, False)
-            GPIO.output(GPIO_D2, True)
-            GPIO.output(GPIO_C1, True)
-            GPIO.output(GPIO_C2, False)
-            print ("Forward")
-            time.sleep(1)
-
-            angle = 180
-            pwm_servo.start(set_duty_cycle(angle))
-            pwm_servo2.start(set_duty_cycle(angle))
-            print ("180")
-            GPIO.output(GPIO_B1, True)
-            GPIO.output(GPIO_B2, False)
-            GPIO.output(GPIO_A1, False)
-            GPIO.output(GPIO_A2, True)
-            GPIO.output(GPIO_D1, True)
-            GPIO.output(GPIO_D2, False)
-            GPIO.output(GPIO_C1, False)
-            GPIO.output(GPIO_C2, True)
-            print ("Backward")
-            time.sleep(1)
             
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
