@@ -32,7 +32,7 @@ GPIO.setup(GPIO_Bpwm, GPIO.OUT)
 GPIO.setup(GPIO_A1, GPIO.OUT)
 GPIO.setup(GPIO_A2, GPIO.OUT)
 GPIO.setup(GPIO_Apwm, GPIO.OUT)
-_setPin(
+
 
 # set speed to HIGH
 
@@ -44,7 +44,10 @@ GPIO.output(GPIO_A1, True)
 GPIO.output(GPIO_A2, True)
 shiftpi.digitalWrite(3, shiftpi.HIGH)
 shiftpi.digitalWrite(2, shiftpi.HIGH) 
-
+shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
+shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
+shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
 
 
 # Set PWM parameters
