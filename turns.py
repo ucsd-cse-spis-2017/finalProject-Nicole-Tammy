@@ -70,6 +70,19 @@ def stayStill():
     print ("Stop")
     time.sleep(1)
 
+def forward():
+    GPIO.output(GPIO_B1, False)
+    GPIO.output(GPIO_B2, True)
+    GPIO.output(GPIO_A1, True)
+    GPIO.output(GPIO_A2, False)
+    GPIO.output(GPIO_D1, False)
+    GPIO.output(GPIO_D2, True)
+    GPIO.output(GPIO_C1, True)
+    GPIO.output(GPIO_C2, False)
+    print ("Forward")
+    time.sleep(1)
+
+
 #left 30 degrees
 def left30():
     GPIO.output(GPIO_A1, True)
