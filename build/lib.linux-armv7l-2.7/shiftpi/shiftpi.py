@@ -6,7 +6,7 @@ A library that allows simple access to 74HC595 shift registers on a Raspberry Pi
 import RPi.GPIO as GPIO
 from time import sleep
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 
 version = "0.2"
 version_info = (0, 2)
@@ -17,9 +17,9 @@ HIGH = 1
 LOW  = 0
 
 # Define pins
-_SER_pin   = 22    #pin 14 on the 75HC595
-_RCLK_pin  = 18    #pin 12 on the 75HC595
-_SRCLK_pin = 16   #pin 11 on the 75HC595
+_SER_pin   = 25    #pin 14 on the 75HC595
+_RCLK_pin  = 24    #pin 12 on the 75HC595
+_SRCLK_pin = 23   #pin 11 on the 75HC595
 
 # is used to store states of all pins
 _registers = list()
@@ -87,7 +87,6 @@ def digitalWrite(pin, mode):
     '''
     if pin == ALL:
         _all(mode)
-        print("dig write block")
     else:
         if len(_registers) == 0:
             _all(LOW)
@@ -110,7 +109,6 @@ def _all(mode, execute = True):
 
     for pin in range(0, all_shr):
         _setPin(pin, mode)
-        print("all block")
     if execute:
         _execute()
 
@@ -121,7 +119,6 @@ def _setPin(pin, mode):
         _registers[pin] = mode
     except IndexError:
         _registers.insert(pin, mode)
-        print(pin)
 
 def _execute():
     all_pins = _all_pins()

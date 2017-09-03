@@ -1,9 +1,9 @@
 # Libraries
 import RPi.GPIO as GPIO
-import time
+#import time
 import shiftpi
  
-# GPIO Mode (BOARD / BCM)
+#GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
 
 #set shift register pins
@@ -12,6 +12,7 @@ RCLK = 18
 SRCLK = 16
 
 # set GPIO Pins
+
 GPIO_Servo= 37
 GPIO_Servo2= 12
 
@@ -33,7 +34,6 @@ GPIO.setup(GPIO_A1, GPIO.OUT)
 GPIO.setup(GPIO_A2, GPIO.OUT)
 GPIO.setup(GPIO_Apwm, GPIO.OUT)
 
-
 # set speed to HIGH
 
 GPIO.output(GPIO_Bpwm, True)
@@ -42,6 +42,7 @@ GPIO.output(GPIO_B2, True)
 GPIO.output(GPIO_Apwm, True)
 GPIO.output(GPIO_A1, True)
 GPIO.output(GPIO_A2, True)
+
 shiftpi.digitalWrite(3, shiftpi.HIGH)
 shiftpi.digitalWrite(2, shiftpi.HIGH) 
 shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
@@ -67,7 +68,7 @@ pwm_servo2 = GPIO.PWM(GPIO_Servo2, pwm_frequency)
 angle = 90
 pwm_servo.start(set_duty_cycle(angle))
 pwm_servo2.start(set_duty_cycle(angle))
- 
+
 if __name__ == '__main__':
     try:
         while True:
@@ -75,51 +76,62 @@ if __name__ == '__main__':
             angle=0
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            print("0")
+            ###print("0")
             GPIO.output(GPIO_B1, False)
             GPIO.output(GPIO_B2, True)
             GPIO.output(GPIO_A1, True)
             GPIO.output(GPIO_A2, False)
-
-            shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+            
+            
+            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
             shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
+            shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
             shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2
-
-            print ("Forward")
+            shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
+            ###print ("Forward")
             shiftpi.delay(1000)
 
+            
             angle=45
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            print ("45")
+            ###print ("45")
             GPIO.output(GPIO_B1, True)
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
             GPIO.output(GPIO_A2, True)
 
-            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+            
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was high
             shiftpi.digitalWrite(15, shiftpi.LOW) #D2
-            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
-            shiftpi.digitalWrite(4, shiftpi.HIGH) #C2        
-            print ("Backward")
+            shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was high
+            shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
+            shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM        
+            ####print ("Backward")
             shiftpi.delay(1000)
+
+            
 
             angle = 90
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            print ("90")
+            ###print ("90")
             GPIO.output(GPIO_B1, False)
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
             GPIO.output(GPIO_A2, False)
+            
+            
+            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1 was low
+            shiftpi.digitalWrite(15, shiftpi.HIGH) #D2 was low
+            shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM was low
+            shiftpi.digitalWrite(5, shiftpi.HIGH) #C1 was low
+            shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
+            shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM was low
 
-            shiftpi.digitalWrite(1, shiftpi.LOW) #D1
-            shiftpi.digitalWrite(15, shiftpi.LOW) #D2
-            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
-            shiftpi.digitalWrite(4, shiftpi.LOW) #C2
-
-            print ("Stop")
+            ###print ("Stop")
             shiftpi.delay(1000)
 
             
@@ -127,4 +139,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("Program stopped by User")
         GPIO.cleanup()
+
         
