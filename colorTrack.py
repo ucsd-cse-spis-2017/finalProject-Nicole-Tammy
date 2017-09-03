@@ -12,6 +12,8 @@ import time
 import numpy as np
 from PIL import Image
 
+import os
+
 GPIO.setmode(GPIO.BOARD)
 
 
@@ -19,6 +21,18 @@ def nothing(x):
     pass
 
 
+def leftOrRight(centerWhiteBlockX, centerX, width):
+    distMid = centerWhiteBlockX - centerX
+    if (distMid < 0) & (distMid < width/4) & (distMid > width/8):
+        turns.left30()
+    if (distMid < 0) & (distMid > width/4):
+        turns.left60()
+    if (distMid > 0) & (distMid < width/4) & (distMid > width/8):
+        turns.right30()
+    if (distMid > 0) & (distMid > width/4):
+        turns.right60()
+    else:
+        turns.forward()
 
 
 # initialize the camera and grab a reference to the raw camera capture
@@ -31,7 +45,10 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 time.sleep(0.1)
 
 if ultrasound.distance()<= 20:
+    """stay still until the greeting is done and then restart"""
     turns.stayStill()
+    os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
+
 
 # capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
@@ -63,7 +80,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     
     for x in range((width-1)/5, 5): # looping through the image in five pixel blocks
         for y in range((height -1)/5, 5):
-            
             whiteBlock = True
             centerWhiteBlockX = 0
 
@@ -77,19 +93,6 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             if whiteBlock = True:
                 """ find x dist from center line of image and turn right or left accordingly"""
                leftOrRight(centerWhiteBlockX, centerX, width)
-               
-def leftOrRight(centerWhiteBlockX, centerX, width):
-    distMid = centerWhiteBlockX - centerX
-    if (distMid < 0) & (distMid < width/4) & (distMid > width/8):
-        turns.left30()
-    if (distMid < 0) & (distMid > width/4):
-        turns.left60()
-    if (distMid > 0) & (distMid < width/4) & (distMid > width/8):
-        turns.right30()
-    if (distMid > 0) & (distMid > width/4):
-        turns.right60()
-    else:
-        turns.forward()
         
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)

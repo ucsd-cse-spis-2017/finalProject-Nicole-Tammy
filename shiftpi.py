@@ -137,4 +137,8 @@ def _execute():
 
     GPIO.output(_RCLK_pin, GPIO.HIGH)
 
+def shiftRegCleanup():
+    GPIO.cleanup()
+
+    
 pinsSetup()

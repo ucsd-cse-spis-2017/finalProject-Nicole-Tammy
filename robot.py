@@ -69,6 +69,7 @@ angle = 90
 pwm_servo.start(set_duty_cycle(angle))
 pwm_servo2.start(set_duty_cycle(angle))
 
+"""problems: back wheels keep turning after end, D doesn't turn foward"""
 if __name__ == '__main__':
     try:
         while True:
@@ -81,9 +82,9 @@ if __name__ == '__main__':
             GPIO.output(GPIO_B2, True)
             GPIO.output(GPIO_A1, True)
             GPIO.output(GPIO_A2, False)
-            
-            
-            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+
+            #PROBLEM IS HERE!!!!!!!!!!!!!!!!
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1
             shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
             shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
             shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
@@ -103,10 +104,10 @@ if __name__ == '__main__':
             GPIO.output(GPIO_A2, True)
 
             
-            shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was high
+            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
             shiftpi.digitalWrite(15, shiftpi.LOW) #D2
             shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
-            shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was high
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
             shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
             shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM        
             ####print ("Backward")
@@ -124,12 +125,12 @@ if __name__ == '__main__':
             GPIO.output(GPIO_A2, False)
             
             
-            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1 was low
-            shiftpi.digitalWrite(15, shiftpi.HIGH) #D2 was low
-            shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM was low
-            shiftpi.digitalWrite(5, shiftpi.HIGH) #C1 was low
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
+            shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
+            shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
-            shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM was low
+            shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
 
             ###print ("Stop")
             shiftpi.delay(1000)
@@ -139,5 +140,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("Program stopped by User")
         GPIO.cleanup()
+        shiftpi.shiftRegCleanup()
 
         
