@@ -28,13 +28,13 @@ time.sleep(0.1)
 
 def leftOrRight(centerWhiteBlockX, centerX, width):
     distMid = centerWhiteBlockX - centerX
-    if (distMid < 0) & (distMid < width/4) & (distMid > width/8):
+    if (distMid < 0) & (distMid > -(width//4)) & (distMid < -(width//8)):
         turns.left30()
-    if (distMid < 0) & (distMid > width/4):
+    if (distMid < 0) & (distMid < -(width//4)):
         turns.left60()
-    if (distMid > 0) & (distMid < width/4) & (distMid > width/8):
+    if (distMid > 0) & (distMid < width//4) & (distMid > width//8):
         turns.right30()
-    if (distMid > 0) & (distMid > width/4):
+    if (distMid > 0) & (distMid > width//4):
         turns.right60()
     else:
         turns.forward()
@@ -84,10 +84,10 @@ def captureFrames():
                 whiteBlock = True
                 centerWhiteBlockX = 0
                 print("inside of y loop")
-                for x1 in range(0,x+4):
+                for x1 in range(0,x+4, 1):
                     print("looping through x")
-                    for y1 in range(0,y+4):
-                        print("x1 is ", x1) 
+                    for y1 in range(0,y+4, 1):
+                        print("x1 is ", x1, " x is  ", x) 
                         pixel = maskIm.getpixel((x+x1, y+y1))
 
                         if x1 == 3:             #these are the middle pixels of the white block
