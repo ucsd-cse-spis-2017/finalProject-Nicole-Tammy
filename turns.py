@@ -1,11 +1,16 @@
 # Libraries
 import RPi.GPIO as GPIO
 import time
+import shiftpi
 turnTime = 1
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
- 
+
+#set shift register pins
+SER = 22
+RCLK = 18
+SRCLK = 16
 # set GPIO Pins
 
 GPIO_B1 = 29
@@ -48,6 +53,14 @@ GPIO.output(GPIO_B2, True)
 GPIO.output(GPIO_Apwm, True)
 GPIO.output(GPIO_A1, True)
 GPIO.output(GPIO_A2, True)
+
+shiftpi.digitalWrite(2, shiftpi.HIGH) 
+shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+shiftpi.digitalWrite(6, shiftpi.HIGH) #D2
+
+shiftpi.digitalWrite(3, shiftpi.HIGH)
+shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
+shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
 """
 GPIO.output(GPIO_Dpwm, True)
 GPIO.output(GPIO_D1, True)
@@ -63,6 +76,12 @@ def stayStill():
     GPIO.output(GPIO_B2, False)
     GPIO.output(GPIO_A1, False)
     GPIO.output(GPIO_A2, False)
+    shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+    shiftpi.digitalWrite(6, shiftpi.LOW) #D2
+    shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM
+    shiftpi.digitalWrite(5, shiftpi.LOW) #C1 
+    shiftpi.digitalWrite(4, shiftpi.LOW) #C2
+    shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM 
     """
     GPIO.output(GPIO_D1, False)
     GPIO.output(GPIO_D2, False)
@@ -77,6 +96,14 @@ def forward():
     GPIO.output(GPIO_B2, True)
     GPIO.output(GPIO_A1, True)
     GPIO.output(GPIO_A2, False)
+
+    shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+    shiftpi.digitalWrite(6, shiftpi.HIGH) #D2 15
+    shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
+    shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
+    shiftpi.digitalWrite(4, shiftpi.LOW) #C2
+    shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
+    
     """
     GPIO.output(GPIO_D1, False)
     GPIO.output(GPIO_D2, True)
@@ -89,12 +116,20 @@ def forward():
 
 #left 30 degrees
 def left30():
-    GPIO.output(GPIO_A1, True)
-    GPIO.output(GPIO_A2, False)
+    #a is going the opposite
+    GPIO.output(GPIO_A1, False)
+    GPIO.output(GPIO_A2, True)
+    shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
+    shiftpi.digitalWrite(4, shiftpi.LOW) #C2
+    shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
     #GPIO.output(GPIO_C1, True)
     #GPIO.output(GPIO_C2, False)
-    GPIO.output(GPIO_B1, True)
-    GPIO.output(GPIO_B2, False)
+    
+    GPIO.output(GPIO_B1, False)
+    GPIO.output(GPIO_B2, True)
+    shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+    shiftpi.digitalWrite(6, shiftpi.LOW) #D2 15
+    shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
     #GPIO.output(GPIO_D1, True)
     #GPIO.output(GPIO_D2, False)
     print ("Left")
@@ -102,14 +137,23 @@ def left30():
 
 #right 30 degrees
 def right30():
-    GPIO.output(GPIO_B1, False)
-    GPIO.output(GPIO_B2, True)
-    #GPIO.output(GPIO_D1, False)
-    #GPIO.output(GPIO_D2, True)
-    GPIO.output(GPIO_A1, False)
-    GPIO.output(GPIO_A2, True)
+    GPIO.output(GPIO_A1, True)
+    GPIO.output(GPIO_A2, False)
+    shiftpi.digitalWrite(5, shiftpi.LOW) #C1
+    shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
+    shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
     #GPIO.output(GPIO_C1, False)
     #GPIO.output(GPIO_C2, True)
+
+    
+    GPIO.output(GPIO_B1, True)
+    GPIO.output(GPIO_B2, False)
+    shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+    shiftpi.digitalWrite(6, shiftpi.HIGH) #D2 15
+    shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM    
+    #GPIO.output(GPIO_D1, False)
+    #GPIO.output(GPIO_D2, True)
+
     print ("Right")
     time.sleep(turnTime)
             
@@ -135,6 +179,15 @@ if __name__ == '__main__':
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")
-        GPIO.cleanup()
+        #GPIO.cleanup()
+        shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
+        shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
+        shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low
+            
+        shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
+        shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
+        shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
+
+        shiftpi.shiftRegCleanup() 
         
 
