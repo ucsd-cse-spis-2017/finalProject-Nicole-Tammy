@@ -134,7 +134,7 @@ if __name__ == '__main__':
             shiftpi.digitalWrite(5, shiftpi.LOW) #C1 
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2
             shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM 
-            """
+            
             print ("Stop")
             shiftpi.delay(1000)
             
@@ -149,6 +149,7 @@ if __name__ == '__main__':
             turns.forward()
             shiftpi.delay(1000)
             print("going forward")
+            """
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")

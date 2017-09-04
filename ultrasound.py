@@ -52,6 +52,7 @@ def distance():
         distance = (TimeElapsed * 34300) / 2
     else:
         distance = -1
+    print("in Ultrasound")
     return distance
 
 if __name__ == '__main__':

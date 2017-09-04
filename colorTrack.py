@@ -11,15 +11,20 @@ from picamera import PiCamera
 import time
 import numpy as np
 from PIL import Image
-
+import shiftpi
 import os
 
 GPIO.setmode(GPIO.BOARD)
 
 
-def nothing(x):
-    pass
+# initialize the camera and grab a reference to the raw camera capture
+camera = PiCamera()
+camera.resolution = (640, 480)
+camera.framerate = 32
+rawCapture = PiRGBArray(camera, size=(640, 480))
 
+# allow the camera to warmup
+time.sleep(0.1)
 
 def leftOrRight(centerWhiteBlockX, centerX, width):
     distMid = centerWhiteBlockX - centerX
@@ -35,69 +40,88 @@ def leftOrRight(centerWhiteBlockX, centerX, width):
         turns.forward()
 
 
-# initialize the camera and grab a reference to the raw camera capture
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 32
-rawCapture = PiRGBArray(camera, size=(640, 480))
+def checkUltrasound():    
+    if ultrasound.distance()<= 20:
+        """stay still until the greeting is done and then restart"""
+        turns.stayStill()
+        os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
 
-# allow the camera to warmup
-time.sleep(0.1)
+        
+def captureFrames():
+    # capture frames from the camera
+    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+        # grab the raw NumPy array representing the image, then initialize the timestamp
+        # and occupied/unoccupied text
+        image = frame.array
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-if ultrasound.distance()<= 20:
-    """stay still until the greeting is done and then restart"""
-    turns.stayStill()
-    os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
+        # define the range of the yellow color in hsv
+        lower_yellow = np.array([21, 47, 46])
+        upper_yellow = np.array([32, 255, 255])
 
+        # Threshold the hsv image to get only yellow colors
+        mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 
-# capture frames from the camera
-for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-    # grab the raw NumPy array representing the image, then initialize the timestamp
-    # and occupied/unoccupied text
-    image = frame.array
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        #Bitwise AND mask and original image
+        res = cv2.bitwise_and(image, image, mask = mask)
 
-    # define the range of the yellow color in hsv
-    lower_yellow = np.array([21, 47, 46])
-    upper_yellow = np.array([32, 255, 255])
+        
+        # show the frame
+        cv2.imshow("Frame", image)
+        cv2.imshow("Mask", mask) # where we want to find the white pixels
+        cv2.imshow("Res", res)
+        key = cv2.waitKey(1) & 0xFF
+        maskIm=Image.fromarray(mask.astype('uint8'))
 
-    # Threshold the hsv image to get only yellow colors
-    mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+        width = int(maskIm.size[0])
+        height = int(maskIm.size[1])
+        centerX = width/2
 
-    #Bitwise AND mask and original image
-    res = cv2.bitwise_and(image, image, mask = mask)
+        print("about to go into the loop")
+        for x in range(0, (width-1)//5, 5): # looping through the image in five pixel blocks
+            print("inside of x loop")
+            for y in range(0, (height -1)//5, 5):
+                whiteBlock = True
+                centerWhiteBlockX = 0
+                print("inside of y loop")
+                for x1 in range(0,x+4):
+                    print("looping through x")
+                    for y1 in range(0,y+4):
+                        print("x1 is ", x1) 
+                        pixel = maskIm.getpixel((x+x1, y+y1))
 
-    
-    # show the frame
-    cv2.imshow("Frame", image)
-    cv2.imshow("Mask", mask) # where we want to find the white pixels
-    cv2.imshow("Res", res)
-    key = cv2.waitKey(1) & 0xFF
+                        if x1 == 3:             #these are the middle pixels of the white block
+                            centerWhiteBlockX = (x1+x) # x dist from origin is (x1+x)
+                            print("inside of x ==3")
+                        if pixel == (0,0,0): #checks if the pixel is black
+                            print("There are black pixels")
+                            whiteBlock = False
+                if whiteBlock == True:
+                    """ find x dist from center line of image and turn right or left accordingly"""
+                    print("is going to run leftOrRight")
+                    leftOrRight(centerWhiteBlockX, centerX, width)
+                    
+        # clear the stream in preparation for the next frame
+        rawCapture.truncate(0)
 
-    width = mask.size(0)
-    height = mask.size(1)
-    centerX = width/2
-    
-    for x in range((width-1)/5, 5): # looping through the image in five pixel blocks
-        for y in range((height -1)/5, 5):
-            whiteBlock == True
-            centerWhiteBlockX = 0
+        # if the `q` key was pressed, break from the loop
+        if key == ord("q"):
+            cv2.destroyAllWindows()
+            break
 
-            for x1 in range(x+4):
-                for y1 in range(y+4):
-                    pixel = mask.getPixel(x, y)
-                    if x1 == 3:             #these are the middle pixels of the white block
-                        centerWhiteBlockX = (x1+x) # x dist from origin is (x1+x)
-                    if pixel == (0,0,0): #checks if the pixel is black
-                        whiteBlock == False
-            if whiteBlock == True:
-                """ find x dist from center line of image and turn right or left accordingly"""
-                leftOrRight(centerWhiteBlockX, centerX, width)
-                
-    # clear the stream in preparation for the next frame
-    rawCapture.truncate(0)
-
-    # if the `q` key was pressed, break from the loop
-    if key == ord("q"):
-        cv2.destroyAllWindows()
-        break
+if __name__ == '__main__':
+    try:
+        while True:
+            checkUltrasound()
+            captureFrames()
+            # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Program stopped by User")
+        #GPIO.cleanup()
+        shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
+        shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
+        shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low
+        shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
+        shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
+        shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
+        shiftpi.shiftRegCleanup()
