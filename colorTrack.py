@@ -80,7 +80,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     
     for x in range((width-1)/5, 5): # looping through the image in five pixel blocks
         for y in range((height -1)/5, 5):
-            whiteBlock = True
+            whiteBlock == True
             centerWhiteBlockX = 0
 
             for x1 in range(x+4):
@@ -89,11 +89,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                     if x1 == 3:             #these are the middle pixels of the white block
                         centerWhiteBlockX = (x1+x) # x dist from origin is (x1+x)
                     if pixel == (0,0,0): #checks if the pixel is black
-                        whiteBlock = False
-            if whiteBlock = True:
+                        whiteBlock == False
+            if whiteBlock == True:
                 """ find x dist from center line of image and turn right or left accordingly"""
-               leftOrRight(centerWhiteBlockX, centerX, width)
-        
+                leftOrRight(centerWhiteBlockX, centerX, width)
+                
     # clear the stream in preparation for the next frame
     rawCapture.truncate(0)
 

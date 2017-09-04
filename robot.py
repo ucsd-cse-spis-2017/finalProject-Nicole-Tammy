@@ -44,9 +44,11 @@ GPIO.output(GPIO_A1, True)
 GPIO.output(GPIO_A2, True)
 
 shiftpi.digitalWrite(3, shiftpi.HIGH)
+
 shiftpi.digitalWrite(2, shiftpi.HIGH) 
 shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
 shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
+
 shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
 shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
 
@@ -77,48 +79,47 @@ if __name__ == '__main__':
             angle=0
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            ###print("0")
+            print("0")
             GPIO.output(GPIO_B1, False)
             GPIO.output(GPIO_B2, True)
             GPIO.output(GPIO_A1, True)
             GPIO.output(GPIO_A2, False)
-
+            
             #PROBLEM IS HERE!!!!!!!!!!!!!!!!
+            
             shiftpi.digitalWrite(1, shiftpi.LOW) #D1
             shiftpi.digitalWrite(15, shiftpi.HIGH) #D2
             shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
+            
             shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2
             shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
-            ###print ("Forward")
+            print ("Forward")
             shiftpi.delay(1000)
-
             
             angle=45
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            ###print ("45")
+            print ("45")
             GPIO.output(GPIO_B1, True)
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
             GPIO.output(GPIO_A2, True)
-
             
             shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
             shiftpi.digitalWrite(15, shiftpi.LOW) #D2
             shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
+            
             shiftpi.digitalWrite(5, shiftpi.LOW) #C1
             shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
             shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM        
-            ####print ("Backward")
+            print ("Backward")
             shiftpi.delay(1000)
-
             
-
             angle = 90
             pwm_servo.start(set_duty_cycle(angle))
             pwm_servo2.start(set_duty_cycle(angle))
-            ###print ("90")
+            print ("90")
             GPIO.output(GPIO_B1, False)
             GPIO.output(GPIO_B2, False)
             GPIO.output(GPIO_A1, False)
@@ -128,18 +129,17 @@ if __name__ == '__main__':
             shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
             shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
             shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low
+            
             shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
             shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
-
-            ###print ("Stop")
+            
+            print ("Stop")
             shiftpi.delay(1000)
-
             
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")
-        GPIO.cleanup()
+        #GPIO.cleanup()
         shiftpi.shiftRegCleanup()
-
         

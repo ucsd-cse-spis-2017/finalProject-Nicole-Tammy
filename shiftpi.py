@@ -87,7 +87,6 @@ def digitalWrite(pin, mode):
     '''
     if pin == ALL:
         _all(mode)
-        print("dig write block")
     else:
         if len(_registers) == 0:
             _all(LOW)
@@ -110,7 +109,6 @@ def _all(mode, execute = True):
 
     for pin in range(0, all_shr):
         _setPin(pin, mode)
-        print("all block")
     if execute:
         _execute()
 
@@ -121,7 +119,6 @@ def _setPin(pin, mode):
         _registers[pin] = mode
     except IndexError:
         _registers.insert(pin, mode)
-        print(pin)
 
 def _execute():
     all_pins = _all_pins()

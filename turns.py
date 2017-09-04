@@ -103,7 +103,7 @@ def left30():
 #right 30 degrees
 def right30():
     GPIO.output(GPIO_B1, False)
-    GPIO.output(GPIO_B2, True)-
+    GPIO.output(GPIO_B2, True)
     #GPIO.output(GPIO_D1, False)
     #GPIO.output(GPIO_D2, True)
     GPIO.output(GPIO_A1, False)
@@ -127,7 +127,7 @@ def right60():
 if __name__ == '__main__':
     try:
         left30()
-        right30()s
+        right30()
         stayStill()
         left60()
         right60()
