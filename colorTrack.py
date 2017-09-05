@@ -25,9 +25,10 @@ rawCapture = PiRGBArray(camera, size=(640, 480))
 
 # allow the camera to warmup
 time.sleep(0.1)
-
-def leftOrRight(centerWhiteBlockX, centerX, width):
-    distMid = centerWhiteBlockX - centerX
+'''                                       
+def leftOrRight(x, centerX, width):
+    distMid = x - centerX
+    print("distmid is ", distMid, "centerX ", centerX, "x ", x, "width is ", width)
     if (distMid < 0) & (distMid > -(width//4)) & (distMid < -(width//8)):
         turns.left30()
     if (distMid < 0) & (distMid < -(width//4)):
@@ -38,13 +39,15 @@ def leftOrRight(centerWhiteBlockX, centerX, width):
         turns.right60()
     else:
         turns.forward()
-
+'''
 
 def checkUltrasound():    
-    if ultrasound.distance()<= 20:
+    if ultrasound.distance()<= 15:
         """stay still until the greeting is done and then restart"""
         turns.stayStill()
         os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
+    elif ultrasound.distance() > 50:
+        turns.forward()
 
         
 def captureFrames():
@@ -67,40 +70,39 @@ def captureFrames():
 
         
         # show the frame
-        cv2.imshow("Frame", image)
-        cv2.imshow("Mask", mask) # where we want to find the white pixels
-        cv2.imshow("Res", res)
+        #cv2.imshow("Frame", image)
+        #cv2.imshow("Mask", mask) # where we want to find the white pixels
+        #cv2.imshow("Res", res)
         key = cv2.waitKey(1) & 0xFF
         maskIm=Image.fromarray(mask.astype('uint8'))
 
         width = int(maskIm.size[0])
         height = int(maskIm.size[1])
         centerX = width/2
+        ifBlack = True
 
-        print("about to go into the loop")
-        for x in range(0, (width-1)//5, 5): # looping through the image in five pixel blocks
-            print("inside of x loop")
-            for y in range(0, (height -1)//5, 5):
-                whiteBlock = True
-                centerWhiteBlockX = 0
-                print("inside of y loop")
-                for x1 in range(0,x+4, 1):
-                    print("looping through x")
-                    for y1 in range(0,y+4, 1):
-                        print("x1 is ", x1, " x is  ", x) 
-                        pixel = maskIm.getpixel((x+x1, y+y1))
+        leftMostQuarter = img[0:480, 0: (640//4)]
+        leftMidQuarter = img[0:480, 320]
+        rightMidQuarter = img[0:480, 320:(320+640//4)]
+        rightMostQuarter = img[0:480, 320:640]
 
-                        if x1 == 3:             #these are the middle pixels of the white block
-                            centerWhiteBlockX = (x1+x) # x dist from origin is (x1+x)
-                            print("inside of x ==3")
-                        if pixel == (0,0,0): #checks if the pixel is black
-                            print("There are black pixels")
-                            whiteBlock = False
-                if whiteBlock == True:
-                    """ find x dist from center line of image and turn right or left accordingly"""
-                    print("is going to run leftOrRight")
-                    leftOrRight(centerWhiteBlockX, centerX, width)
-                    
+        leftMostWhite = cv2.countNonZero(leftMostQuarter)
+        leftMidWhite = cv2.countNonZero(leftMidQuarter)
+        rightMidQuarter = cv2.countNonZero(rightMidQuarter)
+        rightMostQuarter = cv2.countNonZero(rightMostQuarter)
+        
+        maxWhite = max(max(leftMostWhite, leftMidWhite), max(rightMidWhite, rightMostWhite))
+
+        if maxWhite == leftMostQuarter:
+            turns.left60()
+        elif maxWhite == leftmidQuarter:
+            turns.left30()
+        elif maxWhite == rightmidQuarter:
+            turns.right30()
+        else:
+            turns.right60()                                                                                  
+
+             
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
 
