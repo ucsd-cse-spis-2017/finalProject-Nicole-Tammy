@@ -45,9 +45,9 @@ def checkUltrasound():
     if ultrasound.distance()<= 20:
         """stay still until the greeting is done and then restart"""
         print("GREETING, PLEASE BEND DOWN")
-        os.system('omxplayer hello.mp3 &')   #runs this command through terminal
-        servo.servoHand()
         turns.stayStill()
+        os.system('omxplayer Hello.m4a &')   #runs this command through terminal
+        servo.servoHand()
         return True
     elif ultrasound.distance() > 45    :
         turns.forward()
