@@ -41,14 +41,16 @@ def leftOrRight(x, centerX, width):
         turns.forward()
 '''
 
-def checkUltrasound():    
-    if ultrasound.distance()<= 15:
+def checkUltrasound():
+    if ultrasound.distance()<= 20:
         """stay still until the greeting is done and then restart"""
+        print("GREETING")
         turns.stayStill()
         os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
-    elif ultrasound.distance() > 50:
+        return True
+    elif ultrasound.distance() > 45    :
         turns.forward()
-
+        return False
         
 def captureFrames():
     # capture frames from the camera
@@ -74,35 +76,37 @@ def captureFrames():
         #cv2.imshow("Mask", mask) # where we want to find the white pixels
         #cv2.imshow("Res", res)
         key = cv2.waitKey(1) & 0xFF
-        maskIm=Image.fromarray(mask.astype('uint8'))
+        #maskIm=Image.fromarray(mask.astype('uint8'))
 
-        width = int(maskIm.size[0])
-        height = int(maskIm.size[1])
-        centerX = width/2
-        ifBlack = True
-
-        leftMostQuarter = img[0:480, 0: (640//4)]
-        leftMidQuarter = img[0:480, 320]
-        rightMidQuarter = img[0:480, 320:(320+640//4)]
-        rightMostQuarter = img[0:480, 320:640]
+        #width = int(mask.size[0])
+        #height = int(mask.size[1])
+        #centerX = width/2
+        
+        leftMostQuarter = mask[0:480, 0: (640//4)]
+        leftMidQuarter = mask[0:480, 320]
+        rightMidQuarter = mask[0:480, 320:(320+640//4)]
+        rightMostQuarter = mask[0:480, 320:640]
 
         leftMostWhite = cv2.countNonZero(leftMostQuarter)
         leftMidWhite = cv2.countNonZero(leftMidQuarter)
-        rightMidQuarter = cv2.countNonZero(rightMidQuarter)
-        rightMostQuarter = cv2.countNonZero(rightMostQuarter)
+        rightMidWhite = cv2.countNonZero(rightMidQuarter)
+        rightMostWhite = cv2.countNonZero(rightMostQuarter)
         
         maxWhite = max(max(leftMostWhite, leftMidWhite), max(rightMidWhite, rightMostWhite))
 
-        if maxWhite == leftMostQuarter:
+        if maxWhite == leftMostWhite:
             turns.left60()
-        elif maxWhite == leftmidQuarter:
+        elif maxWhite == leftMidWhite:
             turns.left30()
-        elif maxWhite == rightmidQuarter:
+        elif maxWhite == rightMidWhite:
             turns.right30()
         else:
             turns.right60()                                                                                  
 
-             
+        
+        checkUltrasound()
+        if checkUltrasound() == True:
+            break
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
 
@@ -114,7 +118,6 @@ def captureFrames():
 if __name__ == '__main__':
     try:
         while True:
-            checkUltrasound()
             captureFrames()
             # Reset by pressing CTRL + C
     except KeyboardInterrupt:
