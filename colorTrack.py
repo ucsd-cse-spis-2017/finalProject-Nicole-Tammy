@@ -45,9 +45,9 @@ def checkUltrasound():
     if ultrasound.distance()<= 20:
         """stay still until the greeting is done and then restart"""
         print("GREETING, PLEASE BEND DOWN")
+        os.system('omxplayer hello.mp3 &')   #runs this command through terminal
         servo.servoHand()
         turns.stayStill()
-        os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
         return True
     elif ultrasound.distance() > 45    :
         turns.forward()
@@ -105,8 +105,15 @@ def captureFrames():
             turns.right60()                                                                                  
 
         
-        checkUltrasound()
+        #checkUltrasound()
         if checkUltrasound() == True:
+            shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
+            shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
+            shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
+            shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
+            shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
+            shiftpi.shiftRegCleanup()
             break
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
