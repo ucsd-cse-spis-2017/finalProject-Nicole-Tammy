@@ -1,28 +1,52 @@
-from tkinter import *
 import RPi.GPIO as GPIO
 import time
 
+#GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT)
-pwm = GPIO.PWM(11, 100)
-pwm.start(5)
 
-class App:
+GPIO_Servo= 12
 
-    def __init__(self, master):
-        frame = Frame(master)
-        frame.pack()
-        scale = Scale(frame, from_=0, to=180,
-              orient=HORIZONTAL, command=self.update)
-        scale.grid(row=0)
+GPIO.setup(GPIO_Servo, GPIO.OUT)
 
+# Set PWM parameters
+pwm_frequency = 50
 
-    def update(self, angle):
-        duty = float(angle) / 10.0 + 2.5
-        pwm.ChangeDutyCycle(duty)
+def set_duty_cycle(angle):
+    pulse =  2*float(angle)/180.0 + 0.5
+    duty = 0.1*pulse*pwm_frequency
+    #duty = 2.5 + 0.12*float(angle) for frequency of 100
+    return duty
 
-root = Tk()
-root.wm_title('Servo Control')
-app = App(root)
-root.geometry("200x50+0+0")
-root.mainloop()
+    
+# set speed to HIGH
+pwm_servo = GPIO.PWM(GPIO_Servo, pwm_frequency)
+
+angle = 90
+pwm_servo.start(set_duty_cycle(angle))
+
+def servoHand():
+        angle=0
+        pwm_servo.start(set_duty_cycle(angle))
+        print("0")
+        time.sleep(1)
+        '''
+        angle=45
+        pwm_servo.start(set_duty_cycle(angle))
+        print ("45")
+        time.sleep(1)
+            
+        '''
+        angle = 130
+        pwm_servo.start(set_duty_cycle(angle))
+        print ("130")
+        time.sleep(1)
+
+if __name__ == '__main__':
+    try:
+        while True:
+            servoHand()
+            
+    # Reset by pressing CTRL + C
+    except KeyboardInterrupt:
+        print("Program stopped by User")
+        GPIO.cleanup()

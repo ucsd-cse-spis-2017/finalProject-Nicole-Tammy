@@ -3,7 +3,7 @@
 # the video frames to HSV and displays the video stream
 import RPi.GPIO as GPIO
 import time
-import turns, ultrasound, videocapture
+import turns, ultrasound, videocapture, servo
 import cv2
 import picamera
 from picamera.array import PiRGBArray
@@ -44,7 +44,8 @@ def leftOrRight(x, centerX, width):
 def checkUltrasound():
     if ultrasound.distance()<= 20:
         """stay still until the greeting is done and then restart"""
-        print("GREETING")
+        print("GREETING, PLEASE BEND DOWN")
+        servo.servoHand()
         turns.stayStill()
         os.system('mpg123 -q hello.mp3 &')   #runs this command through terminal
         return True
