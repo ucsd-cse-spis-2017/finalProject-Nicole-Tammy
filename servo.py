@@ -7,7 +7,6 @@ GPIO.setmode(GPIO.BOARD)
 GPIO_Servo= 12
 
 GPIO.setup(GPIO_Servo, GPIO.OUT)
-
 # Set PWM parameters
 pwm_frequency = 50
 
@@ -22,24 +21,18 @@ def set_duty_cycle(angle):
 pwm_servo = GPIO.PWM(GPIO_Servo, pwm_frequency)
 
 angle = 90
-#pwm_servo.start(set_duty_cycle(angle))
 
 def servoHand():
         angle=0
         pwm_servo.start(set_duty_cycle(angle))
         print("0")
         time.sleep(1)
-        '''
-        angle=45
-        pwm_servo.start(set_duty_cycle(angle))
-        print ("45")
-        time.sleep(1)
-            
-        '''
+        
         angle = 100
         pwm_servo.start(set_duty_cycle(angle))
         print ("100")
         time.sleep(1)
+        
 if __name__ == '__main__':
     try:
         while True:
