@@ -36,9 +36,9 @@ def servoHand():
         time.sleep(1)
             
         '''
-        angle = 130
+        angle = 100
         pwm_servo.start(set_duty_cycle(angle))
-        print ("130")
+        print ("100")
         time.sleep(1)
 if __name__ == '__main__':
     try:

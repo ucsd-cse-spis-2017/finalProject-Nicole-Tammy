@@ -150,6 +150,22 @@ if __name__ == '__main__':
             shiftpi.delay(1000)
             print("going forward")
             """
+            GPIO.output(GPIO_B1, True)
+            GPIO.output(GPIO_B2, False)
+            GPIO.output(GPIO_A1, False)
+            GPIO.output(GPIO_A2, True)
+            
+            shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+            shiftpi.digitalWrite(6, shiftpi.LOW) #D2
+            shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
+            
+            shiftpi.digitalWrite(5, shiftpi.LOW) #C1
+            shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
+            shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM        
+            print ("Backward")
+            shiftpi.delay(1000)
+            
+            
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")

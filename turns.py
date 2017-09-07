@@ -115,10 +115,10 @@ def forward():
 
 
 #left 30 degrees
-def left30():
+def left30(): 
     #a is going the opposite
-    GPIO.output(GPIO_A1, False)
-    GPIO.output(GPIO_A2, True)
+    GPIO.output(GPIO_A1, True)
+    GPIO.output(GPIO_A2, False)
     shiftpi.digitalWrite(5, shiftpi.HIGH) #C1
     shiftpi.digitalWrite(4, shiftpi.LOW) #C2
     shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
@@ -127,8 +127,8 @@ def left30():
     
     GPIO.output(GPIO_B1, False)
     GPIO.output(GPIO_B2, True)
-    shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
-    shiftpi.digitalWrite(6, shiftpi.LOW) #D2 15
+    shiftpi.digitalWrite(1, shiftpi.LOW) #D1
+    shiftpi.digitalWrite(6, shiftpi.HIGH) #D2 15
     shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
     #GPIO.output(GPIO_D1, True)
     #GPIO.output(GPIO_D2, False)
@@ -136,9 +136,9 @@ def left30():
     time.sleep(turnTime)
 
 #right 30 degrees
-def right30():
-    GPIO.output(GPIO_A1, True)
-    GPIO.output(GPIO_A2, False)
+def right30(): 
+    GPIO.output(GPIO_A1, False)
+    GPIO.output(GPIO_A2, True)
     shiftpi.digitalWrite(5, shiftpi.LOW) #C1
     shiftpi.digitalWrite(4, shiftpi.HIGH) #C2
     shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
@@ -148,8 +148,8 @@ def right30():
     
     GPIO.output(GPIO_B1, True)
     GPIO.output(GPIO_B2, False)
-    shiftpi.digitalWrite(1, shiftpi.LOW) #D1
-    shiftpi.digitalWrite(6, shiftpi.HIGH) #D2 15
+    shiftpi.digitalWrite(1, shiftpi.HIGH) #D1
+    shiftpi.digitalWrite(6, shiftpi.LOW) #D2 15
     shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM    
     #GPIO.output(GPIO_D1, False)
     #GPIO.output(GPIO_D2, True)
@@ -158,7 +158,7 @@ def right30():
     time.sleep(turnTime)
             
 #left 60 degrees
-def left60():
+def left60(): 
     left30()
     left30()
     
