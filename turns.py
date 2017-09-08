@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import shiftpi, servoWheels
-turnTime = 1
+turnTime = .25
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
@@ -65,7 +65,7 @@ def stayStill():
     shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM 
 
     print ("Stop")
-    time.sleep(1)
+    time.sleep(.4)
 
 def forward():
     GPIO.output(GPIO_B1, False)
@@ -84,7 +84,7 @@ def forward():
     shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
     
     print ("Forward")
-    time.sleep(1)
+    time.sleep(.25)
 
 
 #left 30 degrees
@@ -106,7 +106,7 @@ def left30():
     shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
 
     print ("Left")
-    time.sleep(turnTime)
+    time.sleep(.35)
 
 #right 30 degrees
 def right30(): 
@@ -127,7 +127,7 @@ def right30():
 
 
     print ("Right")
-    time.sleep(turnTime)
+    time.sleep(.35)
             
 #left 60 degrees
 def left60(): 
@@ -153,6 +153,8 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("Program stopped by User")
         #GPIO.cleanup()
+        servo.servo2Stop()
+        servo.servo3Stop()
         shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
         shiftpi.digitalWrite(15, shiftpi.LOW) #D2 was low
         shiftpi.digitalWrite(2, shiftpi.LOW) #DPWM was low

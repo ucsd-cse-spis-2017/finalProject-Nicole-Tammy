@@ -25,33 +25,33 @@ pwm_servo3 = GPIO.PWM(GPIO_Servo3, pwm_frequency)
 
 angle = 90
 
-def servo2Forward():
+def servo2Backwards():
         
         angle=45
         pwm_servo2.start(set_duty_cycle(angle))
-        print ("servo 2 Forward")
+        #print ("servo 2 Backwards")
         #time.sleep(1)
 
 def servo3Forward():
         
         angle=45
         pwm_servo3.start(set_duty_cycle(angle))
-        print ("servo 3 Forward)
+        #print ("servo 3 Forward")
         #time.sleep(1)
 
 
-def servo2Backwards():
+def servo2Forward():
 
         angle=135
         pwm_servo2.start(set_duty_cycle(angle))
-        print ("servo 2 Backwards")
+        #print ("servo 2 Forward")
         #time.sleep(1)
 
 def servo3Backwards():
 
         angle=135
         pwm_servo3.start(set_duty_cycle(angle))
-        print ("servo 3 Backwards")
+        #print ("servo 3 Backwards")
         #time.sleep(1)
 
 def servo2Stop():
@@ -69,12 +69,12 @@ def servo3Stop():
 if __name__ == '__main__':
     try:
         while True:
-            servo2Forward()
+            #servo2Forward()
             servo2Backwards()
-            servo2Stop()
+            #servo2Stop()
             servo3Forward()
-            servo3Backwards()
-            servo3Stop()
+            #servo3Backwards()
+            #servo3Stop()
             
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
