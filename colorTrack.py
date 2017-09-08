@@ -50,6 +50,7 @@ def checkUltrasound():
         servo.servoHand()
         return True
     else:
+        turns.forward()
         return False
         
 def captureFrames():
@@ -112,7 +113,7 @@ def captureFrames():
             turns.right60()
             turns.stayStill()
 
-        turns.forward()
+        
         
         #checkUltrasound()
         if checkUltrasound() == True:
@@ -122,6 +123,7 @@ def captureFrames():
             shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
             shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
             shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
+            camera.close()
             shiftpi.shiftRegCleanup()
             break
         # clear the stream in preparation for the next frame
@@ -146,4 +148,6 @@ if __name__ == '__main__':
         shiftpi.digitalWrite(5, shiftpi.LOW) #C1 was low
         shiftpi.digitalWrite(4, shiftpi.LOW) #C2 was high
         shiftpi.digitalWrite(3, shiftpi.LOW) #CPWM was low
+        camera.close()
         shiftpi.shiftRegCleanup()
+        
