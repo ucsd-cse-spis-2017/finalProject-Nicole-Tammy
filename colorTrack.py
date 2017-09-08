@@ -49,9 +49,7 @@ def checkUltrasound():
         os.system('omxplayer Hello.m4a &')   #runs this command through terminal
         servo.servoHand()
         return True
-    elif ultrasound.distance() > 45    :
-        turns.forward()
-        turns.stayStill()
+    else:
         return False
         
 def captureFrames():
@@ -113,7 +111,8 @@ def captureFrames():
         else:
             turns.right60()
             turns.stayStill()
-         #maxWhite == 0 change case
+
+        turns.forward
         
         #checkUltrasound()
         if checkUltrasound() == True:

@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import shiftpi, servoWheels
-turnTime = .25
+turnTime = .2
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
@@ -106,7 +106,7 @@ def left30():
     shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
 
     print ("Left")
-    time.sleep(.25)
+    time.sleep(turnTime)
 
 #right 30 degrees
 def right30(): 
@@ -127,7 +127,7 @@ def right30():
 
 
     print ("Right")
-    time.sleep(.3)
+    time.sleep(turnTime)
             
 #left 60 degrees
 def left60(): 
