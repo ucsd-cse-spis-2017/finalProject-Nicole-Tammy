@@ -106,7 +106,7 @@ def left30():
     shiftpi.digitalWrite(2, shiftpi.HIGH) #DPWM
 
     print ("Left")
-    time.sleep(.35)
+    time.sleep(.25)
 
 #right 30 degrees
 def right30(): 
@@ -127,7 +127,7 @@ def right30():
 
 
     print ("Right")
-    time.sleep(.35)
+    time.sleep(.3)
             
 #left 60 degrees
 def left60(): 
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")
-        #GPIO.cleanup()
+        GPIO.cleanup()
         servo.servo2Stop()
         servo.servo3Stop()
         shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low

@@ -3,7 +3,7 @@
 # the video frames to HSV and displays the video stream
 import RPi.GPIO as GPIO
 import time
-import turns, ultrasound, videocapture, servo
+import turns, ultrasound, videocapture, servo, servoWheels
 import cv2
 import picamera
 from picamera.array import PiRGBArray
