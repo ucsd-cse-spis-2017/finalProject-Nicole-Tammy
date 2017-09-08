@@ -20,7 +20,7 @@ GPIO.setmode(GPIO.BOARD)
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = (640, 480)
-camera.framerate = 32
+camera.framerate = 25
 rawCapture = PiRGBArray(camera, size=(640, 480))
 
 # allow the camera to warmup
@@ -51,6 +51,7 @@ def checkUltrasound():
         return True
     elif ultrasound.distance() > 45    :
         turns.forward()
+        turns.stayStill()
         return False
         
 def captureFrames():
@@ -98,7 +99,9 @@ def captureFrames():
         rightMidWhite, "  rightMostWhite: ", rightMostWhite)
         print("")
         print("maxWhite is ", maxWhite)
-        if maxWhite == leftMostWhite:
+        if maxWhite == 0:
+            turns.stayStill()
+        elif maxWhite == leftMostWhite:
             turns.left60()
             turns.stayStill()
         elif maxWhite == leftMidWhite:
@@ -110,7 +113,7 @@ def captureFrames():
         else:
             turns.right60()
             turns.stayStill()
-        
+         #maxWhite == 0 change case
         
         #checkUltrasound()
         if checkUltrasound() == True:
