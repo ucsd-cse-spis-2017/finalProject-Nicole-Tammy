@@ -84,7 +84,7 @@ def forward():
     shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
     
     print ("Forward")
-    time.sleep(.25)
+    time.sleep(.2)
 
 
 #left 30 degrees
