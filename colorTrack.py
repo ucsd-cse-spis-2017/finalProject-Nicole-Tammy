@@ -42,7 +42,7 @@ def leftOrRight(x, centerX, width):
 '''
 
 def checkUltrasound():
-    if ultrasound.distance()<= 20:
+    if ultrasound.distance() <= 20 and ultrasound.distance() > -1:
         """stay still until the greeting is done and then restart"""
         print("GREETING, PLEASE BEND DOWN")
         turns.stayStill()
@@ -51,6 +51,7 @@ def checkUltrasound():
         return True
     else:
         turns.forward()
+        turns.stayStill()
         return False
         
 def captureFrames():
@@ -76,17 +77,17 @@ def captureFrames():
         #cv2.imshow("Frame", image)
         #cv2.imshow("Mask", mask) # where we want to find the white pixels
         #cv2.imshow("Res", res)
-        key = cv2.waitKey(1) & 0xFF
+        #key = cv2.waitKey(0) # was waitkey(1)   #& 0xFF
         #maskIm=Image.fromarray(mask.astype('uint8'))
 
         #width = int(mask.size[0])
         #height = int(mask.size[1])
         #centerX = width/2
         
-        leftMostQuarter = mask[0:480, 0: (640//4)]
-        leftMidQuarter = mask[0:480, 320]
-        rightMidQuarter = mask[0:480, 320:(320+640//4)]
-        rightMostQuarter = mask[0:480, 320:640]
+        leftMostQuarter = mask[0:480, 0: (640//4)+(640//8)]
+        leftMidQuarter = mask[0:480, (640//4)+(640//8):320]
+        rightMidQuarter = mask[0:480, 320:(320+640//8)]
+        rightMostQuarter = mask[0:480, (320+640//8):640]
 
         leftMostWhite = cv2.countNonZero(leftMostQuarter)
         leftMidWhite = cv2.countNonZero(leftMidQuarter)
@@ -98,19 +99,19 @@ def captureFrames():
         rightMidWhite, "  rightMostWhite: ", rightMostWhite)
         print("")
         print("maxWhite is ", maxWhite)
+
+        """camera was flipped and hotglued so we are going to switch the directions"""
         if maxWhite == 0:
             turns.stayStill()
         elif maxWhite == leftMostWhite:
-            turns.left60()
-            turns.stayStill()
-        elif maxWhite == leftMidWhite:
-            turns.left30()
-            turns.stayStill()
-        elif maxWhite == rightMidWhite:
             turns.right30()
             turns.stayStill()
+        elif maxWhite == leftMidWhite:
+            turns.stayStill()
+        elif maxWhite == rightMidWhite:
+            turns.stayStill()
         else:
-            turns.right60()
+            turns.left30()
             turns.stayStill()
 
         
@@ -128,11 +129,12 @@ def captureFrames():
             break
         # clear the stream in preparation for the next frame
         rawCapture.truncate(0)
-
+        """
         # if the `q` key was pressed, break from the loop
         if key == ord("q"):
             cv2.destroyAllWindows()
             break
+        """
 
 if __name__ == '__main__':
     try:

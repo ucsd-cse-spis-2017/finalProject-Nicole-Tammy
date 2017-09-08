@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import shiftpi, servoWheels
-turnTime = .2
+turnTime = .15
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
@@ -84,7 +84,7 @@ def forward():
     shiftpi.digitalWrite(3, shiftpi.HIGH) #CPWM
     
     print ("Forward")
-    time.sleep(.2)
+    time.sleep(.1)
 
 
 #left 30 degrees
@@ -142,7 +142,7 @@ def right60():
  
 if __name__ == '__main__':
     try:
-        left30()
+        left60()
         right30()
         forward()
         stayStill()
