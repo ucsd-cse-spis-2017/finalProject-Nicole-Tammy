@@ -3,7 +3,7 @@
 # the video frames to HSV and displays the video stream
 import RPi.GPIO as GPIO
 import time
-import turns, ultrasound, videocapture, servo
+import turns, ultrasound, servo
 import cv2
 import picamera
 from picamera.array import PiRGBArray
@@ -94,7 +94,10 @@ def captureFrames():
         rightMostWhite = cv2.countNonZero(rightMostQuarter)
         
         maxWhite = max(max(leftMostWhite, leftMidWhite), max(rightMidWhite, rightMostWhite))
-
+        print("leftMostWhite: ", leftMostWhite, "  leftMidWhite: ", leftMidWhite, "  rightMidWhite: ",
+        rightMidWhite, "  rightMostWhite: ", rightMostWhite)
+        print("")
+        print("maxWhite is ", maxWhite)
         if maxWhite == leftMostWhite:
             turns.left60()
             turns.stayStill()
@@ -107,7 +110,7 @@ def captureFrames():
         else:
             turns.right60()
             turns.stayStill()
-
+        
         
         #checkUltrasound()
         if checkUltrasound() == True:
