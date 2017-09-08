@@ -112,7 +112,7 @@ def captureFrames():
             turns.right60()
             turns.stayStill()
 
-        turns.forward
+        turns.forward()
         
         #checkUltrasound()
         if checkUltrasound() == True:
