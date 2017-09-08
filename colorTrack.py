@@ -46,7 +46,10 @@ def checkUltrasound():
         """stay still until the greeting is done and then restart"""
         print("GREETING, PLEASE BEND DOWN")
         turns.stayStill()
-        os.system('omxplayer Hello.m4a &')   #runs this command through terminal
+        os.system('omxplayer Hello.m4a &')
+        time.sleep(2)
+        os.system('omxplayer Glenn.m4a &')
+        time.sleep(6)
         servo.servoHand()
         return True
     else:
