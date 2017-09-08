@@ -49,7 +49,7 @@ def checkUltrasound():
         os.system('omxplayer Hello.m4a &')
         time.sleep(2)
         os.system('omxplayer Glenn.m4a &')
-        time.sleep(6)
+        time.sleep(5)
         servo.servoHand()
         return True
     else:

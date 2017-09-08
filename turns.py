@@ -2,7 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import shiftpi, servoWheels
-turnTime = .15
+turnTime = .1
  
 # GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BOARD)
@@ -159,10 +159,10 @@ if __name__ == '__main__':
         while True:
             left30()
             stayStill()
-            right30()
-            stayStill()
-            forward()
-            stayStill()
+            #right30()
+            #stayStill()
+            #forward()
+            #stayStill()
             #left60()
             #right60()
             #stayStill()
