@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Program stopped by User")
-        GPIO.cleanup()
+        #GPIO.cleanup()
         servo.servo2Stop()
         servo.servo3Stop()
         shiftpi.digitalWrite(1, shiftpi.LOW) #D1 was low
